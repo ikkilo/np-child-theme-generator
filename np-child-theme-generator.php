@@ -31,19 +31,19 @@ try {
         throw new Exception('Class file for Theme Assets is missing.');
     }
 } catch (Exception $e) {
-    error_log('Error loading plugin: ' . $e->getMessage());
-    wp_die('Error loading the plugin: ' . $e->getMessage());
+    error_log('Error loading plugin: ' . esc_html($e->getMessage())); // Escape for logging
+    wp_die(esc_html__('Error loading the plugin: ', 'np-child-theme-generator') . esc_html($e->getMessage())); // Escape for screen output
 }
 
 // Enqueue script only on the theme page (themes.php)
 function npctg_enqueue_admin_script($hook) {
     if ($hook === 'themes.php') { // Check if on the themes page
-        wp_enqueue_script('np-child-theme-generator', NPCTG_PLUGIN_URL . 'assets/js/child-theme-button.js', ['jquery'], '1.2', true);
+        wp_enqueue_script('np-child-theme-generator', esc_url(NPCTG_PLUGIN_URL . 'assets/js/child-theme-button.js'), ['jquery'], '1.2', true);
 
         // Pass the admin URL and nonce to JavaScript
         wp_localize_script('np-child-theme-generator', 'npctg_data', [
-            'ajax_url' => admin_url('themes.php'),
-            'nonce' => wp_create_nonce('npctg_create_child_theme_nonce')
+            'ajax_url' => esc_url(admin_url('themes.php')),
+            'nonce'    => wp_create_nonce('npctg_create_child_theme_nonce')
         ]);
     }
 }
@@ -56,8 +56,8 @@ function npctg_initialize_plugin(): void {
         $theme_generator = new NPCTG_Theme_Generator();
         $theme_generator->init();
     } catch (Exception $e) {
-        error_log('Error initializing plugin: ' . $e->getMessage());
-        wp_die('Error initializing the theme generator: ' . $e->getMessage());
+        error_log('Error initializing plugin: ' . esc_html($e->getMessage())); // Escape for logging
+        wp_die(esc_html__('Error initializing the theme generator: ', 'np-child-theme-generator') . esc_html($e->getMessage())); // Escape for screen output
     }
 }
 
