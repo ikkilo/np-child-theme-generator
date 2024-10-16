@@ -62,3 +62,5 @@ function npctg_initialize_plugin(): void {
 }
 
 add_action('plugins_loaded', 'npctg_initialize_plugin');
+
+?>
